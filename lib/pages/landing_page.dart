@@ -51,11 +51,11 @@ class _LandingPageState extends State<LandingPage> {
               }, child: const LoginButtonRow(iconData: Icons.email,loginText:'Continue With E-mail')),
               SizedBox(height: 10.h,),
               ElevatedButton(style: Constants.googleLoginButtonStyle,onPressed: (){
-                try {
+                if(auth.currentUser==null){
                   userProvider.signInwWithGoogle(context);
                   Navigator.pushReplacementNamed(context,'/usersDetailPage');
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                }else{
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please sign out before sign in')));
                 }
               }, child: const LoginButtonRow(iconData: Icons.home, loginText: 'Continue With Google')),
               SizedBox(height: 10.h,),

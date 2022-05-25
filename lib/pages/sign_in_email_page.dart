@@ -74,11 +74,14 @@ class _SignInEmailPageState extends State<SignInEmailPage> {
                 Center(child: TextButton(onPressed: (){}, child:const  Text('Forgot Password ?',style: TextStyle(color: Colors.grey,decoration: TextDecoration.underline),))),
                  SizedBox(height: 200.h,),
                  SizedBox(height: 50.h,width: double.infinity,child: ElevatedButton(onPressed: (){
-                    userProvider.signInWithEmailAndPassword(emailController.text, passwordController.text, context);
+                     if(auth.currentUser==null){
+                     userProvider.signInWithEmailAndPassword(emailController.text, passwordController.text, context);
                     Future.delayed(const Duration(seconds: 2),(){
-                      FirebaseAuth.instance.currentUser!=null?Navigator.pushReplacementNamed(context, '/usersDetailPage'):
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Something is went wrong!')));
+                    Navigator.pushReplacementNamed(context, '/usersDetailPage');
                     });
+                   }else{
+                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please sign out before sign in')));
+                   }
                  }, child: const Text('Continue'),),),
               ],
             ),

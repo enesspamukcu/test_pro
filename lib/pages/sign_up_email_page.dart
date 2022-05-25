@@ -163,12 +163,16 @@ class _SignUpWithEmailPageState extends State<SignUpWithEmailPage> {
                     child: ElevatedButton(
                       style: formControl(),
                         onPressed: () {
+                          if(auth.currentUser==null){
+                             userProvider.createUserWithEmailAndPassword(textEditingControllerEmail.text,textEditingControllerCreatePassword.text,context);
                             Future.delayed(const Duration(seconds:2),(){
                               auth.currentUser!=null?Navigator.pushReplacementNamed(context,'/namePage'):ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Something is went wrong!')));
                             });
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please sign out before sign up')));
+                          }
                           if(formKey.currentState!.validate()){
                             formKey.currentState!.save();
-                             userProvider.createUserWithEmailAndPassword(textEditingControllerEmail.text,textEditingControllerCreatePassword.text,context);
                           }
                         }, child: const Text('Continue')))
                 ],
