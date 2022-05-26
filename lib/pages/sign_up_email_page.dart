@@ -162,10 +162,10 @@ class _SignUpWithEmailPageState extends State<SignUpWithEmailPage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       style: formControl(),
-                        onPressed: () {
+                        onPressed: () async{
                           if(auth.currentUser==null){
-                             userProvider.createUserWithEmailAndPassword(textEditingControllerEmail.text,textEditingControllerCreatePassword.text,context);
-                            Future.delayed(const Duration(seconds:2),(){
+                             await userProvider.createUserWithEmailAndPassword(textEditingControllerEmail.text,textEditingControllerCreatePassword.text,context);
+                            Future.delayed(const Duration(seconds:1),(){
                               auth.currentUser!=null?Navigator.pushReplacementNamed(context,'/namePage'):ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Something is went wrong!')));
                             });
                           }else{

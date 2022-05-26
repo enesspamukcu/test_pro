@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:test_pro/api/firebase_api.dart';
 import 'package:test_pro/constants.dart';
@@ -83,9 +84,12 @@ class _UserDetailPageState extends State<UserDetailPage> {
                 }
               }),
             SizedBox(height: 20.h,),
-            NextButton(color: Colors.red,text: 'Sign Out!', onPress: (){
-              userProvider.signOutUser();
-                Navigator.popAndPushNamed(context,'/landingPage');
+            NextButton(color: Colors.red,text: 'Sign Out!', onPress: ()async{
+              await GoogleSignIn().signOut();
+               userProvider.signOutUser();
+                Future.delayed(const Duration(seconds: 1),(){
+                  Navigator.popAndPushNamed(context,'/landingPage');
+                });
             }),
             SizedBox(height: 20.h,),
             NextButton(text: 'Update My Information', onPress: ()=>Navigator.popAndPushNamed(context, '/namePage'))

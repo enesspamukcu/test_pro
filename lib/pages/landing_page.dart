@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:test_pro/api/firebase_api.dart';
 import 'package:test_pro/constants.dart';
 import 'package:test_pro/provider/user_provider.dart';
 import 'package:test_pro/widgets/login_button_row.dart';
@@ -19,19 +20,16 @@ class _LandingPageState extends State<LandingPage> {
   void initState() {
     auth =FirebaseAuth.instance;
     super.initState();
-     auth.authStateChanges().listen((User? user) {
-    if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Kullanıcı başarılı bir şekilde çıkış yaptı')));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('${user.email} başarılı bir şekilde giriş yaptı.Ve email durumu ${user.emailVerified}')));
-    }
-  });
+    FirebaseApi.authStateChanges(context);
   }
   @override
   Widget build(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(onPressed: () => userProvider.signOutUser(),icon: const Icon(Icons.logout),color:Colors.red,iconSize: 26,)
+        ],
         title: const Text('Test Pro Gym',style: TextStyle(color: Colors.black),),
         backgroundColor: Colors.white,
         elevation: 0,
@@ -50,10 +48,12 @@ class _LandingPageState extends State<LandingPage> {
                 Navigator.pushNamed(context, '/registerPageOne');
               }, child: const LoginButtonRow(iconData: Icons.email,loginText:'Continue With E-mail')),
               SizedBox(height: 10.h,),
-              ElevatedButton(style: Constants.googleLoginButtonStyle,onPressed: (){
+              ElevatedButton(style: Constants.googleLoginButtonStyle,onPressed: ()async{
                 if(auth.currentUser==null){
-                  userProvider.signInwWithGoogle(context);
-                  Navigator.pushReplacementNamed(context,'/usersDetailPage');
+                  await userProvider.signInwWithGoogle(context);
+                    Future.delayed(const Duration(milliseconds: 500),(){
+                    Navigator.pushReplacementNamed(context,'/usersDetailPage');
+                    });
                 }else{
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please sign out before sign in')));
                 }

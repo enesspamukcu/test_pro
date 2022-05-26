@@ -11,11 +11,11 @@ class UserProvider with ChangeNotifier {
 
   void readUsersInfo() => FirebaseApi.readUsersInfo();
 
-  void createUserWithEmailAndPassword(String email,String password,BuildContext context) =>FirebaseApi.createUserWithEmailAndPassword(email, password, context);
+  Future createUserWithEmailAndPassword(String email,String password,BuildContext context)async =>FirebaseApi.createUserWithEmailAndPassword(email, password, context);
 
   void signOutUser()=>FirebaseApi.signOutUser();
 
   void signInWithEmailAndPassword(String email,String password,BuildContext context) => FirebaseApi.signInWithEmailAndPassword(email, password, context);
   
-  void signInwWithGoogle(BuildContext context) =>FirebaseApi.signInWithGoogle(context);
+  Future signInwWithGoogle(BuildContext context) =>FirebaseApi.signInWithGoogle(context);
 }

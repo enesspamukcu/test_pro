@@ -25,20 +25,16 @@ class FirebaseApi{
   }
 
   static void signOutUser()async{
-    var user = GoogleSignIn().currentUser;
-      if (user != null) {
-     await GoogleSignIn().signOut();
- }
-    FirebaseAuth.instance.signOut();
+  FirebaseAuth.instance.signOut();
 }
 
   static void authStateChanges(BuildContext context){
-        FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
     if (user == null) {
       debugPrint('User is currently signed out!');
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('User is currently signed out!')));
     } else {
-      debugPrint('User is signed in!');
+      debugPrint('${FirebaseAuth.instance.currentUser!.email} is signed in!');
        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('User is signed in!')));
     }
   });
@@ -52,7 +48,7 @@ class FirebaseApi{
     }
   }
 
-  static signInWithGoogle(BuildContext context)async{
+  static Future signInWithGoogle(BuildContext context)async{
     try {
        GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
     final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
@@ -60,7 +56,7 @@ class FirebaseApi{
     accessToken: googleAuth?.accessToken,
     idToken: googleAuth?.idToken,
   );
-  await FirebaseAuth.instance.signInWithCredential(credential);
+    await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
     }
